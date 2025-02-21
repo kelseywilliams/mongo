@@ -5,18 +5,20 @@ services:
     image: mongo
     restart: always
     volumes:
-      - mongodb-data:/data/db
+      - ./data:/root/data
+      - ./logs:/root/logs
+      - ./mongod.conf:/etc/mongod.conf
+      - /etc/letsencrypt/live/kelseywilliams.co/privkey.pem:/etc/privkey.pem:ro
+      - /etc/letsencrypt/live/kelseywilliams.co/fullchain.pem:/etc/fullchain.pem:ro
     environment:
-      MONGO_INITDB_ROOT_USERNAME: user
-      MONGO_INITDB_ROOT_PASSWORD: m_Nf!iBt'tcK3n
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    entrypoint: ["mongod","--config","/etc/mongod.conf"]
     networks:
       - site
     ports:
-      - "27017:27017"
+      - "2999:2999"
 
 networks:
   site:
     external: true
-
-volumes:
-  mongodb-data:
